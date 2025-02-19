@@ -3,9 +3,9 @@
 return [
 
     /*
-    |----------------------------------------------------------------------
+    |--------------------------------------------------------------------------
     | Default Queue Connection Name
-    |----------------------------------------------------------------------
+    |--------------------------------------------------------------------------
     |
     | Laravel's queue supports a variety of backends via a single, unified
     | API, giving you convenient access to each backend using identical
@@ -13,12 +13,12 @@ return [
     |
     */
 
-    'default' => env('QUEUE_CONNECTION', 'sync'),
+    'default' => env('QUEUE_CONNECTION', 'database'),
 
     /*
-    |----------------------------------------------------------------------
+    |--------------------------------------------------------------------------
     | Queue Connections
-    |----------------------------------------------------------------------
+    |--------------------------------------------------------------------------
     |
     | Here you may configure the connection options for every queue backend
     | used by your application. An example configuration is provided for
@@ -36,7 +36,7 @@ return [
 
         'database' => [
             'driver' => 'database',
-            'connection' => env('DB_QUEUE_CONNECTION', env('DB_CONNECTION')),
+            'connection' => env('DB_QUEUE_CONNECTION'),
             'table' => env('DB_QUEUE_TABLE', 'jobs'),
             'queue' => env('DB_QUEUE', 'default'),
             'retry_after' => (int) env('DB_QUEUE_RETRY_AFTER', 90),
@@ -75,9 +75,9 @@ return [
     ],
 
     /*
-    |----------------------------------------------------------------------
+    |--------------------------------------------------------------------------
     | Job Batching
-    |----------------------------------------------------------------------
+    |--------------------------------------------------------------------------
     |
     | The following options configure the database and table that store job
     | batching information. These options can be updated to any database
@@ -91,9 +91,9 @@ return [
     ],
 
     /*
-    |----------------------------------------------------------------------
+    |--------------------------------------------------------------------------
     | Failed Queue Jobs
-    |----------------------------------------------------------------------
+    |--------------------------------------------------------------------------
     |
     | These options configure the behavior of failed queue job logging so you
     | can control how and where failed jobs are stored. Laravel ships with
