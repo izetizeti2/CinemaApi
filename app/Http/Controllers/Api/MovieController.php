@@ -84,56 +84,61 @@ class MovieController extends Controller
 
     // Përditëso një film ekzistues
 
-public function update(Request $request, $id)
-{
-    $movie = Movie::find($id);
-
-    if (!$movie) {
-        return Response::json(['message' => 'Movie not found'], 404);
-    }
-
-    // Validate data
-    $validator = Validator::make($request->all(), [
-        'title' => 'required|string|max:255',
-        'category_id' => 'required|exists:categories,id',
-        'director' => 'required|string|max:255',
-        'release_date' => 'required|date',
-        'synopsis' => 'required|string',
-        'poster' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Allow image file upload
-    ]);
-
-    if ($validator->fails()) {
-        return Response::json(['errors' => $validator->errors()], 400);
-    }
-
-    // Update movie details
-    $movie->update([
-        'title' => $request->title,
-        'category_id' => $request->category_id,
-        'director' => $request->director,
-        'release_date' => $request->release_date,
-        'synopsis' => $request->synopsis,
-    ]);
-
-    // Handle poster file upload (save it the same way as in store)
-    if ($request->hasFile('poster')) {
-        // Delete the old poster file if it exists
-        if ($movie->poster && Storage::exists("public/{$movie->poster}")) {
-            Storage::delete("public/{$movie->poster}");
+ public function update(Request $request, $id)
+    {
+        // Gjejmë filmin në bazën e të dhënave
+        $movie = Movie::find($id);
+    
+        // Kontrollo nëse filmi ekziston
+        if (!$movie) {
+            return Response::json(['message' => 'Movie not found'], 404);
         }
-
-        // Store the new poster
-        $posterPath = $request->file('poster')->store('posters', 'public');
-        $movie->update(['poster' => $posterPath]);
+    
+        // Validimi i të dhënave
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
+            'category_id' => 'required|exists:categories,id',
+            'director' => 'required|string|max:255',
+            'release_date' => 'required|date',
+            'synopsis' => 'required|string',
+            'poster' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Lejo ngarkimin e posterëve
+        ]);
+    
+        // Nëse validimi dështon
+        if ($validator->fails()) {
+            return Response::json(['errors' => $validator->errors()], 400);
+        }
+    
+        // Përditësojmë detajet e filmit
+        $movie->update([
+            'title' => $request->title,
+            'category_id' => $request->category_id,
+            'director' => $request->director,
+            'release_date' => $request->release_date,
+            'synopsis' => $request->synopsis,
+        ]);
+    
+        // Kontrollojmë nëse përdoruesi ka ngarkuar një poster të ri
+        if ($request->hasFile('poster')) {
+            // Ruajmë posterin e ri
+            $posterPath = $request->file('poster')->store('posters', 'public'); 
+            
+            // Krijojmë URL për posterin e ri
+            $posterUrl = asset("storage/{$posterPath}");
+    
+            // Përditësojmë fushën 'poster' të filmit me rrugën e re të posterit
+            $movie->poster = $posterPath;
+    
+            // Përsëri ruajmë filmin me posterin e ri
+            $movie->save();
+        }
+    
+        // Kthejmë përgjigjen me detajet e filmit të përditësuar
+        return Response::json([
+            'message' => 'Movie updated successfully',
+            'movie' => $movie
+        ], 200);
     }
-
-    // Return updated movie with full poster URL
-    return Response::json([
-        'movie' => $movie,
-        'poster_url' => $movie->poster ? asset("storage/{$movie->poster}") : null
-    ]);
-}
-
 
 
     // Fshi një film
