@@ -85,14 +85,6 @@ class AuthController extends Controller
 
     }
 
-    public function getAllUsers()
-{
-    $users = User::all(['id', 'name', 'email', 'role', 'created_at']);
-
-    return response()->json([
-        'message' => 'Users retrieved successfully',
-        'users' => $users
-    ], 200);
-}
+   
 
 }

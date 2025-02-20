@@ -8,9 +8,10 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Middleware\AdminMiddleware;
 
 
-
-
 Route::post('/login', [AuthController::class, 'login']);
+
+
+
 Route::post('/register', [AuthController::class, 'register']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
@@ -19,7 +20,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     // Vetëm adminët mund të marrin listën e përdoruesve
     Route::middleware(AdminMiddleware::class)->group(function () {
-        Route::get('/users', [AuthController::class, 'getAllUsers']);
 
         // Këto rrota janë për administratoret
         Route::post('/categories', [CategoryController::class, 'store']);
@@ -32,9 +32,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
 
     // Rrotat për shikimin e të dhënave
+    
+});
+
     Route::get('/categories', [CategoryController::class, 'index']);
     Route::get('/categories/{id}', [CategoryController::class, 'show']);
     Route::get('/movies', [MovieController::class, 'index']);
     Route::get('/movies/{id}', [MovieController::class, 'show']);
-});
-
