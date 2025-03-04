@@ -25,4 +25,9 @@ class Movie extends Model
     {
         return $this->belongsTo(Category::class);
     }
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'favorites'); // Përdorim belongsToMany për marrëdhënien shumë për shumë
+    }
+    
 }

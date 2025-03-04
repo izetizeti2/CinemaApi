@@ -28,4 +28,13 @@ class User extends Authenticatable
     protected $casts = [
         'password' => 'hashed',
     ];
+
+    public function movies()
+    {
+        return $this->belongsToMany(Movie::class, 'favorites'); // Përdorim belongsToMany për marrëdhënien shumë për shumë
+    }
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class);
+    }
 }

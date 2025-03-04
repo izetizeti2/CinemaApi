@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\MovieController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\FavoriteController;
 
 
 Route::post('/login', [AuthController::class, 'login']);
@@ -18,6 +19,15 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::middleware(['auth:sanctum'])->group(function () {
     // Logout route
     Route::post('/logout', [AuthController::class, 'logout']);
+
+       // Shto film në preferenca
+       Route::post('/favorites/{movie_id}', [FavoriteController::class, 'addToFavorites']);
+    
+       // Merr të gjitha filmat në preferenca
+       Route::get('/favorites', [FavoriteController::class, 'getFavorites']);
+       
+       // Heq film nga preferencat
+       Route::delete('/favorites/{movie_id}', [FavoriteController::class, 'removeFromFavorites']);
 
     // Vetëm adminët mund të marrin listën e përdoruesve
     Route::middleware(AdminMiddleware::class)->group(function () {
