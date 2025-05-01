@@ -1,134 +1,142 @@
-# Blood Donation API
+# 🎬 Cinema API
 
-A RESTful API built with Laravel for managing blood donations, featuring secure authentication, role-based access control (RBAC), and efficient data management.
+A RESTful API built with Laravel for managing movies, categories, and cinema-related content. Includes authentication, admin-only controls, and structured data handling for cinema applications.
 
 ## 🚀 Key Features
 
--   **JWT Authentication**: Secure login & registration.
--   **Role-Based Access Control (RBAC)**: Admins manage users, cities, and roles.
--   **Blood Donation Management**: CRUD operations for donations.
--   **Centralized Database Seeder**: Pre-populated data setup.
--   **RESTful API**: Easy frontend & mobile integration.
+1. **JWT Authentication**  
+   Secure login and token-based session handling using `tymon/jwt-auth`.
+
+2. **Movie & Category Management**  
+   Full CRUD support for movies and categories with admin access.
+
+3. **Public Access & Admin Control**  
+   Non-authenticated users can view movies; only admins can manage content.
+
+---
 
 ## 📌 Requirements
 
-Ensure the following are installed:
+Before installation, make sure the following are installed on your system:
 
 -   PHP >= 8.0
--   Composer (PHP dependency manager)
--   MySQL (or any Laravel-supported database)
--   Postman (Optional for API testing)
+-   Composer
+-   MySQL or MariaDB
+-   Laravel CLI
+-   Postman (optional, for API testing)
+
+---
 
 ## 📥 Installation & Setup
 
-### 1️⃣ Clone & Setup Project
+Follow these steps to set up the project locally:
 
-```sh
-git clone <repo-url>
-cd blood-donation-api
+### 1️⃣ Clone the Project
+
+```bash
+git clone https://github.com/izetizeti2/CinemaApi.git
+cd CinemaApi
 cp .env.example .env
 ```
 
 ### 2️⃣ Install Dependencies
 
-```sh
+```bash
 composer install
 ```
 
-### 3️⃣ Configure Environment Variables
+### 3️⃣ Configure Environment
 
-Edit `.env` with your database credentials:
+Update the `.env` file with your local database credentials:
 
 ```env
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_DATABASE=blood_donation
+DB_DATABASE=cinema_api
 DB_USERNAME=root
 DB_PASSWORD=your_password
 ```
 
-### 4️⃣ Run Migrations & Seed Data
+### 4️⃣ Run Migrations
 
-```sh
-php artisan migrate --seed
+```bash
+php artisan migrate
 ```
 
-### 5️⃣ Generate JWT Secret & Start Server
+### 5️⃣ Generate JWT Secret
 
-```sh
+```bash
 php artisan jwt:secret
+```
+
+### 6️⃣ Start the Laravel Development Server
+
+```bash
 php artisan serve
 ```
 
-The API is now available at: [http://127.0.0.1:8000](http://127.0.0.1:8000)
+Access the API at: [http://127.0.0.1:8000](http://127.0.0.1:8000)
 
 ---
 
-## 🔗 API Endpoints
+## 🔐 Authentication Endpoints
 
-### 🔑 Authentication
-
-| Method | Endpoint        | Description                  |
-| ------ | --------------- | ---------------------------- |
-| POST   | `/api/register` | Register a new user          |
-| POST   | `/api/login`    | Authenticate & get JWT token |
-| POST   | `/api/logout`   | Logout user                  |
-
-**Example Request:**
-
-```sh
-curl -X POST http://127.0.0.1:8000/api/register \
-  -d "name=John Doe&email=john@example.com&password=secret"
-```
-
-### 🩸 Blood Groups & Cities (Authenticated Users)
-
-| Method | Endpoint            | Description           |
-| ------ | ------------------- | --------------------- |
-| GET    | `/api/blood-groups` | List all blood groups |
-| GET    | `/api/cities`       | List all cities       |
-
-### 👤 User Management (Admin Only)
-
-| Method | Endpoint          | Description |
-| ------ | ----------------- | ----------- |
-| GET    | `/api/users`      | List users  |
-| POST   | `/api/users`      | Create user |
-| PUT    | `/api/users/{id}` | Update user |
-| DELETE | `/api/users/{id}` | Delete user |
-
-### 🎭 Role Management (Admin Only)
-
-| Method | Endpoint          | Description |
-| ------ | ----------------- | ----------- |
-| GET    | `/api/roles`      | List roles  |
-| POST   | `/api/roles`      | Create role |
-| PUT    | `/api/roles/{id}` | Update role |
-| DELETE | `/api/roles/{id}` | Delete role |
+| Method | Endpoint      | Description         |
+| ------ | ------------- | ------------------- |
+| POST   | /api/register | Register a new user |
+| POST   | /api/login    | Login and get token |
 
 ---
 
-## ⚡ Best Practices
+## 🎬 Movie Endpoints
 
--   **Environment Security**: Keep `.env` secrets safe.
--   **JWT Token Handling**: Always refresh expired tokens.
--   **Error Handling**: Use Laravel's built-in exception handling.
+| Method | Endpoint         | Description       | Access     |
+| ------ | ---------------- | ----------------- | ---------- |
+| GET    | /api/movies      | List all movies   | Public     |
+| GET    | /api/movies/{id} | Get movie details | Public     |
+| POST   | /api/movies      | Add a new movie   | Admin Only |
+| PUT    | /api/movies/{id} | Update movie info | Admin Only |
+| DELETE | /api/movies/{id} | Delete a movie    | Admin Only |
 
-## 🧪 Testing
+---
 
-Run tests using PHPUnit:
+## 🗂️ Category Endpoints
 
-```sh
+| Method | Endpoint             | Description           | Access     |
+| ------ | -------------------- | --------------------- | ---------- |
+| GET    | /api/categories      | List all categories   | Public     |
+| POST   | /api/categories      | Create a new category | Admin Only |
+| PUT    | /api/categories/{id} | Update category info  | Admin Only |
+| DELETE | /api/categories/{id} | Delete a category     | Admin Only |
+
+---
+
+## 🧪 Running Tests
+
+Use Laravel's built-in test runner:
+
+```bash
 php artisan test
 ```
 
-Use Postman or cURL for manual API testing.
-
-## 🆘 Support
-
-For issues or feature requests, open an issue in the repository.
+You can also test manually using Postman or cURL to hit API endpoints.
 
 ---
 
-Thank you for using the Blood Donation API! 🚀
+## ✅ Best Practices
+
+-   Keep sensitive keys safe by not pushing the `.env` file.
+-   Use middleware like `auth:api` and custom roles for route protection.
+-   Refresh JWT tokens on the frontend when expired.
+-   Use Laravel Form Requests for validating incoming data.
+
+---
+
+## 🆘 Support
+
+If you face any issues or want to suggest features, open an issue at the [GitHub Repository](https://github.com/izetizeti2/CinemaApi/issues).
+
+---
+
+Thanks for using Cinema API! 🍿
